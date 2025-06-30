@@ -23,7 +23,8 @@ module.exports = async (req, res) => {
       return res.status(201).json(rows[0]);
     }
   }
-  if (req.method === 'PUT') {
+  
+ if (req.method === 'PUT') {
     const { id, nombre, telefono, email, notas } = req.body;
     const { rows } = await pool.query(
       'UPDATE personas SET nombre = $1, telefono = $2, email = $3, notas = $4 WHERE id = $5 RETURNING *',
