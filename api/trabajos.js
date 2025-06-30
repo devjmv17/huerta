@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
   }
   
   if (req.method === 'POST') {
-    const { id, tareaid, personaid, huertoid, fecha, horas, notas } = req.body;
+    const { id, tareaid, personaid, huertoid, fecha, horas, notas, importe } = req.body;
     const idNum = Number(id);
     if (idNum > 0) {
       console.log('Body recibido en UPDATE:', { id, tareaid, personaid, huertoid, fecha, horas, notas, importe });
