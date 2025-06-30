@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
       console.log('Body recibido en UPDATE:', { id, tareaid, personaid, huertoid, fecha, horas, notas, importe });
       try {
         const { rows } = await pool.query(
-          'UPDATE trabajos SET tareaid = $1, personaid = $2, huertoid = $3, fecha = $4, horas = $5, notas = $6, importe = $7  WHERE id = $7 RETURNING *',
+          'UPDATE trabajos SET tareaid = $1, personaid = $2, huertoid = $3, fecha = $4, horas = $5, notas = $6, importe = $7  WHERE id = $8 RETURNING *',
           [tareaid, personaid, huertoid, fecha, horas, notas, importe, idNum]
         );
         return res.status(200).json(rows[0]);
