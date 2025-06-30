@@ -6,20 +6,21 @@ module.exports = async (req, res) => {
     return res.status(200).json(rows);
   }
   if (req.method === 'POST') {
-    const { nombre, notas } = req.body;
-    const { rows } = await pool.query(
-      'INSERT INTO huertos (nombre, notas) VALUES ($1, $2) RETURNING *',
-      [nombre, notas]
-    );
-    return res.status(201).json(rows[0]);
-  }
-  if (req.method === 'PUT') {
     const { id, nombre, notas } = req.body;
-    const { rows } = await pool.query(
-      'UPDATE huertos SET nombre = $1, notas = $2 WHERE id = $3 RETURNING *',
-      [nombre, notas, id]
-    );
-    return res.status(200).json(rows[0]);
+    const idNum = Number(id);
+    if (idNum > 0) {
+      const { rows } = await pool.query(
+        'UPDATE huertos SET nombre = $1, notas = $2 WHERE id = $3 RETURNING *',
+        [nombre, notas, idNum]
+      );
+      return res.status(200).json(rows[0]);
+    } else {
+      const { rows } = await pool.query(
+        'INSERT INTO huertos (nombre, notas) VALUES ($1, $2) RETURNING *',
+        [nombre, notas]
+      );
+      return res.status(201).json(rows[0]);
+    }
   }
   if (req.method === 'DELETE') {
     const { id } = req.query;
