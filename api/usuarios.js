@@ -1,6 +1,6 @@
 const { crearUsuario, listarUsuarios, pool } = require('./db');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 function getUserFromAuthHeader(req) {
   const auth = req.headers.authorization;
