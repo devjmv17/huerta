@@ -8,6 +8,8 @@ module.exports = async (req, res) => {
   const { rows } = await pool.query('SELECT * FROM usuarios WHERE nombre = $1', [nombre]);
   if (rows.length === 0) return res.status(401).json({ error: 'Usuario no encontrado' });
   const user = rows[0];
+  console.log('Intentando login:', nombre, password, user.password);
   const valid = await bcrypt.compare(password, user.password);
   if (!valid) return res.status(401).json({ error: 'Contraseña incorrecta' });
+  console.log('¿Password válida?', valid);
 };
