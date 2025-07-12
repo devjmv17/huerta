@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const pool = require('./db');
+const { pool } = require('./db');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end();

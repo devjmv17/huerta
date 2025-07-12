@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+const bcrypt = require('bcryptjs'); // Usa bcryptjs aquí también
 
 const pool = new Pool({
   connectionString: 'postgres://neondb_owner:npg_HGoawThvDx40@ep-morning-shape-a2n39w6l-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require',
@@ -6,7 +7,6 @@ const pool = new Pool({
 
 // Funciones para usuarios
 async function crearUsuario(nombre, password, rol) {
-  const bcrypt = require('bcrypt');
   const hash = await bcrypt.hash(password, 10);
   const { rows } = await pool.query(
     'INSERT INTO usuarios (nombre, password, rol) VALUES ($1, $2, $3) RETURNING *',
