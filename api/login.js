@@ -15,7 +15,10 @@ module.exports = async (req, res) => {
     console.log('¿Password válida?', valid);
     if (!valid) return res.status(401).json({ error: 'Contraseña incorrecta' });
     const token = jwt.sign({ id: user.id, rol: user.rol }, 'TU_SECRETO', { expiresIn: '1d' });
-    res.json({ token, rol: user.rol, id: user.id });
+    // En login.js, después de obtener el usuario:
+    const personaRes = await pool.query('SELECT id FROM personas WHERE usuario_id = $1', [user.id]);
+    const personaId = personaRes.rows.length > 0 ? personaRes.rows[0].id : null;
+    res.json({ token, rol: user.rol, id: user.id, personaid: personaId });
     console.log('Login endpoint finished');
   } catch (error) {
     console.error('Login error:', error);
