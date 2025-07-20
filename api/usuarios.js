@@ -14,6 +14,7 @@ function getUserFromAuthHeader(req) {
 
 module.exports = async (req, res) => {
   const user = getUserFromAuthHeader(req);
+  console.log('Usuario decodificado:', user);
   if (!user || user.rol !== 'admin') {
     return res.status(403).json({ error: 'Solo administradores pueden realizar esta acción' });
   }
