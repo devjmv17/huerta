@@ -4,18 +4,44 @@ const bcrypt = require('bcryptjs');
 
 function getUserFromAuthHeader(req) {
   const auth = req.headers.authorization;
-  if (!auth || !auth.startsWith('Bearer ')) return null;
+  console.log('=== BACKEND TOKEN VERIFICATION ===');
+  console.log('Authorization header:', auth);
+  if (!auth || !auth.startsWith('Bearer ')) {
+    console.log('No valid auth header');
+    return null;
+  }
   try {
-    return jwt.verify(auth.slice(7), 'TU_SECRETO');
-  } catch {
+    const token = auth.slice(7);
+    console.log('Token to verify:', token);
+    console.log('Token length:', token.length);
+    const decoded = jwt.verify(token, 'TU_SECRETO');
+    console.log('Decoded token:', decoded);
+    console.log('Decoded token type:', typeof decoded);
+    console.log('Decoded token rol:', decoded.rol);
+    console.log('Decoded token rol type:', typeof decoded.rol);
+    console.log('=== END TOKEN VERIFICATION ===');
+    return decoded;
+  } catch (error) {
+    console.log('Token verification error:', error.message);
+    console.log('=== END TOKEN VERIFICATION (ERROR) ===');
     return null;
   }
 }
 
 module.exports = async (req, res) => {
   const user = getUserFromAuthHeader(req);
+  console.log('=== ROLE VERIFICATION ===');
   console.log('Usuario decodificado:', user);
+  console.log('User exists:', !!user);
+  console.log('User rol:', user?.rol);
+  console.log('User rol type:', typeof user?.rol);
+  console.log('Is admin check:', user?.rol === 'admin');
+  console.log('Strict equality check:', user?.rol === 'admin');
+  console.log('Loose equality check:', user?.rol == 'admin');
+  console.log('=== END ROLE VERIFICATION ===');
+  
   if (!user || user.rol !== 'admin') {
+    console.log('Access denied - user:', user, 'rol:', user?.rol);
     return res.status(403).json({ error: 'Solo administradores pueden realizar esta acción' });
   }
 
