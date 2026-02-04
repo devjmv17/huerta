@@ -8,14 +8,14 @@ module.exports = async (req, res) => {
   }
   
   if (req.method === 'POST') {
-    const { id, tareaid, personaid, huertoid, fecha, horas, notas, importe, pagado } = req.body;
+    const { id, tareaid, personaid, huertoid, fecha, temporada, horas, notas, importe, pagado } = req.body;
     const idNum = Number(id);
     if (idNum > 0) {
-      console.log('Body recibido en UPDATE:', { id, tareaid, personaid, huertoid, fecha, horas, notas, importe });
+      console.log('Body recibido en UPDATE:', { id, tareaid, personaid, huertoid, fecha, temporada, horas, notas, importe, pagado });
       try {
         const { rows } = await pool.query(
-          'UPDATE trabajos SET tareaid = $1, personaid = $2, huertoid = $3, fecha = $4, horas = $5, notas = $6, importe = $7, pagado = $8  WHERE id = $9 RETURNING *',
-          [tareaid, personaid, huertoid, fecha, horas, notas, importe, pagado, idNum]
+          'UPDATE trabajos SET tareaid = $1, personaid = $2, huertoid = $3, fecha = $4, temporada = $5, horas = $6, notas = $7, importe = $8, pagado = $9  WHERE id = $10 RETURNING *',
+          [tareaid, personaid, huertoid, fecha, temporada, horas, notas, importe, pagado, idNum]
         );
         return res.status(200).json(rows[0]);
       } catch (error) {
@@ -24,8 +24,8 @@ module.exports = async (req, res) => {
       }
     } else {
       const { rows } = await pool.query(
-        'INSERT INTO trabajos (tareaid, personaid, huertoid, fecha, horas, notas,importe, pagado) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-        [tareaid, personaid, huertoid, fecha, horas, notas,importe, pagado]
+        'INSERT INTO trabajos (tareaid, personaid, huertoid, fecha, temporada, horas, notas, importe, pagado) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+        [tareaid, personaid, huertoid, fecha, temporada, horas, notas, importe, pagado]
       );
       return res.status(201).json(rows[0]);
     }
